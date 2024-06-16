@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-//import 'package:flutter_tts/flutter_tts.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 
@@ -33,7 +33,7 @@ class _MonkimeterHomePageState extends State<MonkimeterHomePage> {
   Timer? _timer;
   bool _isHanging = false;
   bool _inCountDown = false;
-  //FlutterTts flutterTts = FlutterTts();
+  FlutterTts flutterTts = FlutterTts();
   AudioPlayer audioPlayer = AudioPlayer();
 
   void _startCountdown() {
@@ -41,16 +41,18 @@ class _MonkimeterHomePageState extends State<MonkimeterHomePage> {
       _seconds = 5;  // Inicia el contador en 5 segundos
       _isHanging = true;  // Cambia el estado a colgado (hang)
       _inCountDown = true;
+      _playAudio('audio/beep.mp3'); // Reproduce el sonido de beep cada segundo
     });
 
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
-        if (_seconds > 0) {
+        if (_seconds > 1) {
           _seconds--;  // Decrementa el contador cada segundo
           _playAudio('audio/beep.mp3'); // Reproduce el sonido de beep cada segundo
         } else {
           _timer?.cancel();  // Cancela el temporizador de la cuenta regresiva
           _inCountDown = false;
+          _seconds=0;
           _startTimer();  // Inicia el temporizador principal después de la cuenta regresiva
         }
       });
@@ -62,18 +64,18 @@ class _MonkimeterHomePageState extends State<MonkimeterHomePage> {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
         _seconds++;
-        //_speak('${_seconds + 1}'); // Anuncia el número (1, 2, 3, etc.)
+        _speak('${_seconds}'); // Anuncia el número (1, 2, 3, etc.)
       });
     });
   }
 
-/*  Future<void> _speak(String text) async {
+  Future<void> _speak(String text) async {
     await flutterTts.setLanguage("es-ES");
     await flutterTts.setSpeechRate(1.0);
     await flutterTts.setPitch(1.0);
     await flutterTts.speak(text);
   }
-*/
+
 
   Future<void> _playAudio(String audioPath) async {
   try {
