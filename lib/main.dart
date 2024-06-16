@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 //import 'package:flutter_tts/flutter_tts.dart';
-//import 'package:audioplayers/audioplayers.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 
 void main() {
@@ -32,22 +32,25 @@ class _MonkimeterHomePageState extends State<MonkimeterHomePage> {
   int _seconds = 0;
   Timer? _timer;
   bool _isHanging = false;
+  bool _inCountDown = false;
   //FlutterTts flutterTts = FlutterTts();
-  //AudioPlayer audioPlayer = AudioPlayer();
+  AudioPlayer audioPlayer = AudioPlayer();
 
   void _startCountdown() {
     setState(() {
       _seconds = 5;  // Inicia el contador en 5 segundos
       _isHanging = true;  // Cambia el estado a colgado (hang)
+      _inCountDown = true;
     });
 
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
         if (_seconds > 0) {
           _seconds--;  // Decrementa el contador cada segundo
-          _playAudio('beep.mp3'); // Reproduce el sonido de beep cada segundo
+          _playAudio('audio/beep.mp3'); // Reproduce el sonido de beep cada segundo
         } else {
           _timer?.cancel();  // Cancela el temporizador de la cuenta regresiva
+          _inCountDown = false;
           _startTimer();  // Inicia el temporizador principal después de la cuenta regresiva
         }
       });
@@ -74,9 +77,8 @@ class _MonkimeterHomePageState extends State<MonkimeterHomePage> {
 
   Future<void> _playAudio(String audioPath) async {
   try {
-    //await audioPlayer.setSource(AssetSource(audioPath));
-    //await audioPlayer.resume();
-    // Puedes añadir código aquí para manejar el éxito de la reproducción
+    await audioPlayer.setSource(AssetSource(audioPath));
+    await audioPlayer.resume();
     print('Audio playing successfully');
   } catch (e) {
     // Manejo de errores, si ocurre alguno
@@ -86,6 +88,8 @@ class _MonkimeterHomePageState extends State<MonkimeterHomePage> {
 
   void _stopTimer() {
     _timer?.cancel();
+    _seconds=0;
+    _inCountDown = false;
     setState(() {
       _isHanging = false;
     });
@@ -126,10 +130,14 @@ class _MonkimeterHomePageState extends State<MonkimeterHomePage> {
               '🦧 Tiempo colgado 🦧',
               style: Theme.of(context).textTheme.headlineLarge,
             ),
-            Text(
-              '$_seconds segundos',
+            _inCountDown
+              ? Text(
+              '-$_seconds s',
               style: Theme.of(context).textTheme.headlineLarge,
-            ),
+              ): Text(
+              '$_seconds s',
+              style: Theme.of(context).textTheme.headlineLarge,
+              ),
             SizedBox(height: 20),
             _isHanging
                 ? ElevatedButton(

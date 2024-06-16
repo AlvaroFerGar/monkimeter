@@ -31,7 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
   #flutter_tts: ^4.0.2
-  #audioplayers: ^6.0.0
+  audioplayers: ^6.0.0
   sqflite: ^2.0.0+4
   path: ^1.8.0
 
