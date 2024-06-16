@@ -7,12 +7,14 @@ class AjustesPage extends StatefulWidget {
 }
 
 class _AjustesPageState extends State<AjustesPage> {
-  TextEditingController _controller = TextEditingController();
+  TextEditingController _countdownController = TextEditingController();
+  TextEditingController _speakintervalController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _controller.text = countdownStartValue.toString();
+    _countdownController.text = countdownStartValue.toString();
+    _speakintervalController.text = speakInterval.toString();
   }
 
   @override
@@ -26,12 +28,13 @@ class _AjustesPageState extends State<AjustesPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+             SizedBox(height: 20),
             Text(
-              'Valor de inicio de la cuenta atrás',
+              'Cuenta atrás',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             TextField(
-              controller: _controller,
+              controller: _countdownController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: 'Segundos',
@@ -39,6 +42,23 @@ class _AjustesPageState extends State<AjustesPage> {
               onChanged: (value) {
                 setState(() {
                   countdownStartValue = int.tryParse(value) ?? 5;
+                });
+              },
+            ),
+            SizedBox(height: 20),
+            Text(
+              'Intervalo de vocalización',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            TextField(
+              controller: _speakintervalController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: 'Segundos',
+              ),
+              onChanged: (value) {
+                setState(() {
+                  speakInterval = int.tryParse(value) ?? 5;
                 });
               },
             ),

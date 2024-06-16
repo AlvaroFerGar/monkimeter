@@ -49,7 +49,13 @@ class _MetromonoPageState extends State<MetromonoPage> {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
         _seconds++;
-        _speak('$_seconds'); // Anuncia el número (1, 2, 3, etc.)
+         if (_seconds == 1 || (_seconds) % speakInterval == 0) {
+          _speak('$_seconds');
+        }
+        else
+        {
+          _playAudio('audio/beep.mp3'); // Reproduce el sonido de beep cada segundo
+        }
       });
     });
   }
