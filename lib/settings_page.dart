@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'globals.dart';
 
 class AjustesPage extends StatefulWidget {
@@ -13,8 +14,23 @@ class _AjustesPageState extends State<AjustesPage> {
   @override
   void initState() {
     super.initState();
-    _countdownController.text = countdownStartValue.toString();
-    _speakintervalController.text = speakInterval.toString();
+    _loadSettings();
+  }
+
+  void _loadSettings() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      countdownStartValue = prefs.getInt('countdownStartValue') ?? 5;
+      speakInterval = prefs.getInt('speakInterval') ?? 5;
+      _countdownController.text = countdownStartValue.toString();
+      _speakintervalController.text = speakInterval.toString();
+    });
+  }
+
+  void _saveSettings() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt('countdownStartValue', countdownStartValue);
+    prefs.setInt('speakInterval', speakInterval);
   }
 
   @override
@@ -42,6 +58,7 @@ class _AjustesPageState extends State<AjustesPage> {
               onChanged: (value) {
                 setState(() {
                   countdownStartValue = int.tryParse(value) ?? 5;
+                  _saveSettings();
                 });
               },
             ),
@@ -59,6 +76,7 @@ class _AjustesPageState extends State<AjustesPage> {
               onChanged: (value) {
                 setState(() {
                   speakInterval = int.tryParse(value) ?? 5;
+                  _saveSettings();
                 });
               },
             ),
