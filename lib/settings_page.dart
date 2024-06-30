@@ -22,6 +22,7 @@ class _AjustesPageState extends State<AjustesPage> {
     setState(() {
       countdownStartValue = prefs.getInt('countdownStartValue') ?? 5;
       speakInterval = prefs.getInt('speakInterval') ?? 5;
+      soundEnabled = prefs.getBool('soundEnabled') ?? true;
       _countdownController.text = countdownStartValue.toString();
       _speakintervalController.text = speakInterval.toString();
     });
@@ -31,6 +32,7 @@ class _AjustesPageState extends State<AjustesPage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setInt('countdownStartValue', countdownStartValue);
     prefs.setInt('speakInterval', speakInterval);
+    prefs.setBool('soundEnabled', soundEnabled);
   }
 
   @override
@@ -79,6 +81,24 @@ class _AjustesPageState extends State<AjustesPage> {
                   _saveSettings();
                 });
               },
+            ),
+            SizedBox(height: 20),
+              Row(
+                children: [
+                  Text(
+                    'Sonido cada segundo',
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
+                  Checkbox(
+                    value: soundEnabled,
+                    onChanged: (value) {
+                      setState(() {
+                        soundEnabled = value ?? true;
+                        _saveSettings();
+                        });
+                  },
+                ),
+              ],
             ),
           ],
         ),
