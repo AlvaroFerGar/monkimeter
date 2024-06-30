@@ -7,6 +7,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'globals.dart';
+import 'audio_service.dart';
 
 
 class MetromonoPage extends StatefulWidget {
@@ -20,21 +21,21 @@ class _MetromonoPageState extends State<MetromonoPage> {
   bool _isHanging = false;
   bool _inCountDown = false;
   FlutterTts flutterTts = FlutterTts();
-  AudioPlayer audioPlayer = AudioPlayer();
+  final AudioService _audioService = AudioService();
 
   void _startCountdown() {
     setState(() {
       _seconds = countdownStartValue; // Inicia el contador en 5 segundos
       _isHanging = true; // Cambia el estado a colgado (hang)
       _inCountDown = true;
-      _playAudio('audio/beep.mp3'); // Reproduce el sonido de beep al inicio
+       _audioService.playAudio('audio/beep.mp3'); // Reproduce el sonido de beep al inicio
     });
 
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
         if (_seconds > 1) {
           _seconds--; // Decrementa el contador cada segundo
-          _playAudio('audio/beep.mp3'); // Reproduce el sonido de beep cada segundo
+           _audioService.playAudio('audio/beep.mp3'); // Reproduce el sonido de beep cada segundo
         } else {
           _timer?.cancel(); // Cancela el temporizador de la cuenta regresiva
           _inCountDown = false;
@@ -55,7 +56,7 @@ class _MetromonoPageState extends State<MetromonoPage> {
         else
         {
           if(soundEnabled) {
-            _playAudio('audio/water.mp3'); // Reproduce el sonido de beep cada segundo
+             _audioService.playAudio('audio/water.mp3'); // Reproduce el sonido de beep cada segundo
           }
         }
       });
@@ -70,16 +71,6 @@ class _MetromonoPageState extends State<MetromonoPage> {
       await flutterTts.speak(text);
     } catch (e) {
       print('Error al hablar: $e');
-    }
-  }
-
-  Future<void> _playAudio(String audioPath) async {
-    try {
-      await audioPlayer.setSource(AssetSource(audioPath));
-      await audioPlayer.resume();
-      print('Audio playing successfully');
-    } catch (e) {
-      print('Error playing audio: $e');
     }
   }
 
