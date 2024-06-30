@@ -54,7 +54,7 @@ class _MetromonoPageState extends State<MetromonoPage> {
         }
         else
         {
-          _playAudio('audio/beep.mp3'); // Reproduce el sonido de beep cada segundo
+          _playAudio('audio/water.mp3'); // Reproduce el sonido de beep cada segundo
         }
       });
     });
