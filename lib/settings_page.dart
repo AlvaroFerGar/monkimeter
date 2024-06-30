@@ -121,6 +121,12 @@ class _AjustesPageState extends State<AjustesPage> {
                   ),
                 ),
               ),
+              Center(
+                child: Text(
+                  '⚙️🦍',
+                  style: TextStyle(fontSize: 50),
+                ),
+              ),
             ],
           ),
         ),
