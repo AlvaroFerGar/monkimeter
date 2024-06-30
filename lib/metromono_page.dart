@@ -140,6 +140,25 @@ class _MetromonoPageState extends State<MetromonoPage> {
           ],
         ),
       ),
+          bottomNavigationBar: BottomNavigationBar(
+      items: const <BottomNavigationBarItem>[
+        BottomNavigationBarItem(
+          icon: Icon(Icons.save),
+          label: 'Guardar',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.settings),
+          label: 'Ajustes',
+        ),
+      ],
+      onTap: (index) {
+        if (index == 0) {
+          Navigator.pushReplacementNamed(context, '/guardar_cuelgue');
+        } else if (index == 1) {
+          Navigator.pushReplacementNamed(context, '/ajustes');
+        }
+      },
+    ),
     );
   }
 }

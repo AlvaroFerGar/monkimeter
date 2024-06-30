@@ -131,8 +131,27 @@ class _AjustesPageState extends State<AjustesPage> {
           ),
         ),
       ),
-    );
-  }
+      bottomNavigationBar: BottomNavigationBar(
+              items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.timer),
+                  label: 'Metromono',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.save),
+                  label: 'Guardar',
+                ),
+              ],
+              onTap: (index) {
+                if (index == 0) {
+                  Navigator.pushReplacementNamed(context, '/metromono');
+                } else if (index == 1) {
+                  Navigator.pushReplacementNamed(context, '/guardar_cuelgue');
+                }
+              },
+            ),
+          );
+        }
 
   Widget _buildSection(String title, Widget content) {
     return Column(
