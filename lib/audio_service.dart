@@ -10,9 +10,10 @@ class AudioService {
 
   AudioService._internal();
 
-  Future<void> playAudio(String audioPath) async {
+  Future<void> playAudio(String audioPath, {double volume = 1.0}) async {
     try {
       await _audioPlayer.setSource(AssetSource(audioPath));
+      await _audioPlayer.setVolume(volume);
       await _audioPlayer.resume();
       print('Audio playing successfully');
     } catch (e) {
