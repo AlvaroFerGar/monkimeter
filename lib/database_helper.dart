@@ -44,4 +44,20 @@ import 'package:path/path.dart';
        Database db = await instance.database;
        return await db.query('cuelgues', orderBy: 'fecha DESC, hora DESC');
      }
+
+      Future<List<Map<String, dynamic>>> getRecentMatchingCuelgues({
+      required String mano,
+      required int pesoExtra,
+      required String tipoAgarre,
+      int limit = 5
+    }) async {
+      Database db = await instance.database;
+      return await db.query(
+        'cuelgues',
+        where: 'mano = ? AND pesoExtra = ? AND tipoAgarre = ?',
+        whereArgs: [mano, pesoExtra, tipoAgarre],
+        orderBy: 'fecha DESC, hora DESC',
+        limit: limit,
+      );
+    }
    }

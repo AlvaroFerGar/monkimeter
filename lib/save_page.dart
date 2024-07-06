@@ -12,6 +12,29 @@ class _GuardarCuelguePageState extends State<GuardarCuelguePage> {
   final TextEditingController _weightController = TextEditingController(text: '0');
   int _selectedHandIndex = 1;
   String _selectedGrip = 'Barra';
+  List<Map<String, dynamic>> _recentCuelgues = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadRecentCuelgues();
+  }
+
+  Future<void> _loadRecentCuelgues() async {
+    String mano = _selectedHandIndex == 0 ? 'Izquierda' : (_selectedHandIndex == 1 ? 'Ambas' : 'Derecha');
+    int pesoExtra = int.tryParse(_weightController.text) ?? 0;
+    
+    List<Map<String, dynamic>> cuelgues = await DatabaseHelper.instance.getRecentMatchingCuelgues(
+      mano: mano,
+      pesoExtra: pesoExtra,
+      tipoAgarre: _selectedGrip,
+      limit: 3
+    );
+    
+    setState(() {
+      _recentCuelgues = cuelgues;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,8 +87,9 @@ class _GuardarCuelguePageState extends State<GuardarCuelguePage> {
                           ]
                   ),
                   onPressed: () {
+                    //await _loadRecentCuelgues();
                     setState(() {
-                      _selectedHandIndex = 1;
+                    _selectedHandIndex = 1;
                     });
                   },
                   color: _selectedHandIndex == 1 ? Colors.blue : Colors.grey,
@@ -132,6 +156,10 @@ class _GuardarCuelguePageState extends State<GuardarCuelguePage> {
               },
               child: Text('Guardar'),
             ),
+            SizedBox(height: 20),
+            Text('Últimos cuelgues similares:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            SizedBox(height: 10),
+            _buildRecentCuelguesList(),
           ],
         ),
       ),
@@ -157,8 +185,28 @@ class _GuardarCuelguePageState extends State<GuardarCuelguePage> {
     );
   }
 
+  Widget _buildRecentCuelguesList() {
+      if (_recentCuelgues.isEmpty) {
+        return Text('No hay cuelgues recientes con esta configuración.');
+      }
+      
+      return Column(
+        children: _recentCuelgues.map((cuelgue) {
+          return ListTile(
+            title: Text('${cuelgue['segundos']} s - ${cuelgue['fecha']} ${cuelgue['hora']}'),
+            //subtitle: Text('Peso extra: ${cuelgue['pesoExtra']} kg'),
+          );
+        }).toList(),
+      );
+    }
+
   Future<void> _guardarDatos() async {
     int segundos = int.tryParse(_secondsController.text) ?? 0;
+    if(segundos<=0)
+    {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error al guardar el cuelgue')));
+      return;
+    }
     int pesoExtra = int.tryParse(_weightController.text) ?? 0;
     String mano = _selectedHandIndex == 0 ? 'Izquierda' : (_selectedHandIndex == 1 ? 'Ambas' : 'Derecha');
     DateTime now = DateTime.now();
@@ -199,5 +247,6 @@ class _GuardarCuelguePageState extends State<GuardarCuelguePage> {
     }
       print('===========');
 
+    await _loadRecentCuelgues();
   }
 }
