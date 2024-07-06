@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:monkimeter/globals.dart';
 
 class GuardarCuelguePage extends StatefulWidget {
   @override
@@ -6,7 +7,7 @@ class GuardarCuelguePage extends StatefulWidget {
 }
 
 class _GuardarCuelguePageState extends State<GuardarCuelguePage> {
-  final TextEditingController _secondsController = TextEditingController();
+  final TextEditingController _secondsController = TextEditingController(text: lastSecondsInMonkimeter.toString());
   final TextEditingController _weightController = TextEditingController(text: '0');
   int _selectedHandIndex = 1;
   String _selectedGrip = 'Barra';

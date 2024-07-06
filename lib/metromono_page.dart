@@ -50,6 +50,7 @@ class _MetromonoPageState extends State<MetromonoPage> {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
         _seconds++;
+        lastSecondsInMonkimeter=_seconds;
          if (_seconds == 1 || (_seconds) % speakInterval == 0) {
           _speak('$_seconds');
         }
