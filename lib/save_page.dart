@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monkimeter/globals.dart';
+import "package:monkimeter/database_helper.dart";
 
 class GuardarCuelguePage extends StatefulWidget {
   @override
@@ -156,14 +157,47 @@ class _GuardarCuelguePageState extends State<GuardarCuelguePage> {
     );
   }
 
-  void _guardarDatos() {
+  Future<void> _guardarDatos() async {
     int segundos = int.tryParse(_secondsController.text) ?? 0;
     int pesoExtra = int.tryParse(_weightController.text) ?? 0;
+    String mano = _selectedHandIndex == 0 ? 'Izquierda' : (_selectedHandIndex == 1 ? 'Ambas' : 'Derecha');
+    DateTime now = DateTime.now();
+    String fecha = "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
+    String hora = "${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}:${now.second.toString().padLeft(2, '0')}";
 
     print('Datos introducidos:');
     print('Número de segundos: $segundos');
-    print('Mano seleccionada: ${_selectedHandIndex == 0 ? 'Mano Izquierda' : (_selectedHandIndex == 1 ? 'Ambas' : 'Mano Derecha')}');
+    print('Mano seleccionada: $mano');
     print('Peso extra: $pesoExtra kg');
     print('Tipo de agarre: $_selectedGrip');
+    print('Fecha: $fecha');
+    print('Hora: $hora');
+    print('===========');
+
+
+     Map<String, dynamic> row = {
+      'segundos': segundos,
+      'mano': mano,
+      'pesoExtra': pesoExtra,
+      'tipoAgarre': _selectedGrip,
+      'fecha': fecha,
+      'hora': hora,
+     };
+
+     final id = await DatabaseHelper.instance.insertCuelgue(row);
+
+     if (id > 0)
+       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Cuelgue guardado con éxito')));
+     else 
+       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error al guardar el cuelgue')));
+
+
+    print('\nHistórico de Cuelgues:');
+    List<Map<String, dynamic>> cuelgues = await DatabaseHelper.instance.getCuelgues();
+    for (var cuelgue in cuelgues) {
+      print('Fecha: ${cuelgue['fecha']}, Hora: ${cuelgue['hora']}, Segundos: ${cuelgue['segundos']}, Mano: ${cuelgue['mano']}, Peso Extra: ${cuelgue['pesoExtra']}kg, Tipo de Agarre: ${cuelgue['tipoAgarre']}');
+    }
+      print('===========');
+
   }
 }
