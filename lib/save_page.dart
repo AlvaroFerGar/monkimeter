@@ -37,155 +37,52 @@ class _GuardarCuelguePageState extends State<GuardarCuelguePage> {
     });
   }
 
-  @override
+   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Guardar Cuelgue'),
-              backgroundColor: Colors.blue,
+        backgroundColor: Colors.blue,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextField(
-              controller: _secondsController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                labelText: 'Número de segundos',
-                prefixIcon: Icon(Icons.timer),
-              ),
-            ),
-            SizedBox(height: 40),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  icon:  Transform(
-                        transform: Matrix4.identity()..scale(-1.0, 1.0, 1.0),
-                        alignment: Alignment.center,
-                        child: Icon(Icons.pan_tool),
-                      ),
-                  onPressed: () {
-                    setState(() {
-                      _loadRecentCuelgues();
-                      _selectedHandIndex = 0;
-                    });
-                  },
-                  color: _selectedHandIndex == 0 ? Colors.blue : Colors.grey,
-                ),
-                SizedBox(width: 16),
-                IconButton(
-                  icon: Row(
-                        children: [
-                          Transform(
-                            transform: Matrix4.identity()..scale(-1.0, 1.0, 1.0),
-                            alignment: Alignment.center,
-                            child: Icon(Icons.pan_tool),
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: IntrinsicHeight(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextField(
+                          controller: _secondsController,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            labelText: 'Número de segundos',
+                            prefixIcon: Icon(Icons.timer),
                           ),
-                          SizedBox(width: 5),    // Espacio entre los iconos
-                          Icon(Icons.pan_tool)
-                          
-                          ]
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _loadRecentCuelgues();
-                    _selectedHandIndex = 1;
-                    });
-                  },
-                  color: _selectedHandIndex == 1 ? Colors.blue : Colors.grey,
-                ),
-                SizedBox(width: 16),
-                IconButton(
-                  icon: Icon(Icons.pan_tool),
-                  onPressed: () {
-                    setState(() {
-                      _loadRecentCuelgues();
-                      _selectedHandIndex = 2;
-                    });
-                  },
-                  color: _selectedHandIndex == 2 ? Colors.blue : Colors.grey,
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
-            Row(
-              children: [
-                Icon(Icons.anchor),
-                SizedBox(width: 10),
-                Expanded(
-                  child: TextField(
-                    controller: _weightController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      labelText: 'Peso extra (kg)',
+                        ),
+                        SizedBox(height: 20),
+                        _buildHandSelection(),
+                        SizedBox(height: 20),
+                        _buildWeightInput(),
+                        SizedBox(height: 20),
+                        _buildGripTypeSelection(),
+                        SizedBox(height: 20),
+                        _buildActionButtons(context),
+                        SizedBox(height: 20),
+                        Text('Últimos cuelgues similares:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                        SizedBox(height: 10),
+                        Expanded(child: _buildRecentCuelguesList()),
+                      ],
                     ),
-                    onChanged: (value) {
-                      _loadRecentCuelgues();
-                    },
                   ),
                 ),
-              ],
-            ),
-            SizedBox(height: 20),
-            Row(
-              children: [
-                Icon(Icons.panorama_horizontal),
-                SizedBox(width: 10),
-                Text(
-                  'Tipo de agarre:',
-                  style: TextStyle(fontSize: 16),
-                ),
-                SizedBox(width: 10),
-                DropdownButton<String>(
-                  value: _selectedGrip,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      _selectedGrip = newValue!;
-                      _loadRecentCuelgues();
-                    });
-                  },
-                  items: gripTypes
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      _guardarDatos();
-                    },
-                    child: Text('Guardar'),
-                  ),
-                ),
-                SizedBox(width: 10),
-                Text('🧮🐒',style: TextStyle(fontSize: 30),),
-                SizedBox(width: 10),
-                ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => HistoricalDataTable()),
-                  );
-                },
-                  child: Text('Ver histórico'),
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
-            Text('Últimos cuelgues similares:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            SizedBox(height: 10),
-            _buildRecentCuelguesList(),
-          ],
+              ),
+            );
+          },
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -207,6 +104,132 @@ class _GuardarCuelguePageState extends State<GuardarCuelguePage> {
           }
         },
       ),
+    );
+  }
+
+  Widget _buildHandSelection() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        IconButton(
+          icon: Transform(
+            transform: Matrix4.identity()..scale(-1.0, 1.0, 1.0),
+            alignment: Alignment.center,
+            child: Icon(Icons.pan_tool),
+          ),
+          onPressed: () => setState(() {
+            _loadRecentCuelgues();
+            _selectedHandIndex = 0;
+          }),
+          color: _selectedHandIndex == 0 ? Colors.blue : Colors.grey,
+        ),
+        SizedBox(width: 16),
+        IconButton(
+          icon: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Transform(
+                transform: Matrix4.identity()..scale(-1.0, 1.0, 1.0),
+                alignment: Alignment.center,
+                child: Icon(Icons.pan_tool),
+              ),
+              SizedBox(width: 5),
+              Icon(Icons.pan_tool)
+            ]
+          ),
+          onPressed: () => setState(() {
+            _loadRecentCuelgues();
+            _selectedHandIndex = 1;
+          }),
+          color: _selectedHandIndex == 1 ? Colors.blue : Colors.grey,
+        ),
+        SizedBox(width: 16),
+        IconButton(
+          icon: Icon(Icons.pan_tool),
+          onPressed: () => setState(() {
+            _loadRecentCuelgues();
+            _selectedHandIndex = 2;
+          }),
+          color: _selectedHandIndex == 2 ? Colors.blue : Colors.grey,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildWeightInput() {
+    return Row(
+      children: [
+        Icon(Icons.anchor),
+        SizedBox(width: 10),
+        Expanded(
+          child: TextField(
+            controller: _weightController,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              labelText: 'Peso extra (kg)',
+            ),
+            onChanged: (value) {
+              _loadRecentCuelgues();
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildGripTypeSelection() {
+    return Row(
+      children: [
+        Icon(Icons.panorama_horizontal),
+        SizedBox(width: 10),
+        Text(
+          'Tipo de agarre:',
+          style: TextStyle(fontSize: 16),
+        ),
+        SizedBox(width: 10),
+        Expanded(
+          child: DropdownButton<String>(
+            value: _selectedGrip,
+            onChanged: (String? newValue) {
+              setState(() {
+                _selectedGrip = newValue!;
+                _loadRecentCuelgues();
+              });
+            },
+            items: gripTypes.map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildActionButtons(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: ElevatedButton(
+            onPressed: _guardarDatos,
+            child: Text('Guardar'),
+          ),
+        ),
+        SizedBox(width: 10),
+        Text('🧮🐒', style: TextStyle(fontSize: 30),),
+        SizedBox(width: 10),
+        ElevatedButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HistoricalDataTable()),
+            );
+          },
+          child: Text('Ver histórico'),
+        ),
+      ],
     );
   }
 
