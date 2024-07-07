@@ -146,7 +146,7 @@ class _GuardarCuelguePageState extends State<GuardarCuelguePage> {
                       _loadRecentCuelgues();
                     });
                   },
-                  items: <String>['Barra', '4Fx40', '4Fx25', 'romo 22º', 'romo 12º']
+                  items: gripTypes
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,

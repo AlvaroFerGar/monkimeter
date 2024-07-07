@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'globals.dart';
 import 'audio_service.dart';
+import 'manage_griptypes_page.dart';
 
 class AjustesPage extends StatefulWidget {
   @override
@@ -87,6 +89,14 @@ class _AjustesPageState extends State<AjustesPage> {
       print("Aquí se borrará la DB");
   }
 
+    Future<void> _addAgarre() async {
+       await Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ManageGripsPage()),
+                  );
+      print("Aquí se añade un agarre");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -154,6 +164,17 @@ class _AjustesPageState extends State<AjustesPage> {
                 child: ElevatedButton(
                   onPressed: _restoreDefaults,
                   child: Text('Volver a configuración por defecto'),
+                  style: ElevatedButton.styleFrom(
+                    //backgroundColor: Colors.blue,
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              Center(
+                child: ElevatedButton(
+                  onPressed: _addAgarre,
+                  child: Text('Añadir/quitar tipos de agarre'),
                   style: ElevatedButton.styleFrom(
                     //backgroundColor: Colors.blue,
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
