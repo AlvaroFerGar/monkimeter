@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:monkimeter/globals.dart';
 import "package:monkimeter/database_helper.dart";
+import "package:monkimeter/historical_datatable.dart";
 
 class GuardarCuelguePage extends StatefulWidget {
   @override
@@ -170,9 +171,12 @@ class _GuardarCuelguePageState extends State<GuardarCuelguePage> {
                 Text('🧮🐒',style: TextStyle(fontSize: 30),),
                 SizedBox(width: 10),
                 ElevatedButton(
-                  onPressed: () {
-                    // Aquí puedes añadir la lógica para ver el histórico
-                  },
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HistoricalDataTable()),
+                  );
+                },
                   child: Text('Ver histórico'),
                 ),
               ],
