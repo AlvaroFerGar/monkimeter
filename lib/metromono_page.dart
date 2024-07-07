@@ -110,13 +110,14 @@ class _MetromonoPageState extends State<MetromonoPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Metromono'),
+        backgroundColor: Colors.blue,
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              '🦧 Tiempo colgado 🦧',
+              'Tiempo colgado',
               style: Theme.of(context).textTheme.headlineLarge,
             ),
             _inCountDown
@@ -138,6 +139,10 @@ class _MetromonoPageState extends State<MetromonoPage> {
                     onPressed: _startCountdown,
                     child: const Text('Iniciar'),
                   ),
+            Text(
+              '⏳🦧',
+              style: TextStyle(fontSize: 50),
+            )
           ],
         ),
       ),

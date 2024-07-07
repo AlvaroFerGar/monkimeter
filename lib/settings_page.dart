@@ -48,6 +48,45 @@ class _AjustesPageState extends State<AjustesPage> {
     _saveSettings();
   }
 
+  Future<void> _showDeleteConfirmationDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // El usuario debe tocar un botón para cerrar el diálogo
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmar eliminación'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('¿Seguro que quieres eliminar el historial de datos?'),
+                Text('🙈 Esta acción no se puede deshacer 🙈'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancelar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Eliminar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _deleteDB();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+    void _deleteDB() {
+      print("Aquí se borrará la DB");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -116,7 +155,18 @@ class _AjustesPageState extends State<AjustesPage> {
                   onPressed: _restoreDefaults,
                   child: Text('Volver a configuración por defecto'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
+                    //backgroundColor: Colors.blue,
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              Center(
+                child: ElevatedButton(
+                  onPressed: _showDeleteConfirmationDialog,
+                  child: Text('Borrar histórico de cuelgues'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   ),
                 ),

@@ -41,6 +41,7 @@ class _GuardarCuelguePageState extends State<GuardarCuelguePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Guardar Cuelgue'),
+              backgroundColor: Colors.blue,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -67,6 +68,7 @@ class _GuardarCuelguePageState extends State<GuardarCuelguePage> {
                       ),
                   onPressed: () {
                     setState(() {
+                      _loadRecentCuelgues();
                       _selectedHandIndex = 0;
                     });
                   },
@@ -87,8 +89,8 @@ class _GuardarCuelguePageState extends State<GuardarCuelguePage> {
                           ]
                   ),
                   onPressed: () {
-                    //await _loadRecentCuelgues();
                     setState(() {
+                      _loadRecentCuelgues();
                     _selectedHandIndex = 1;
                     });
                   },
@@ -99,6 +101,7 @@ class _GuardarCuelguePageState extends State<GuardarCuelguePage> {
                   icon: Icon(Icons.pan_tool),
                   onPressed: () {
                     setState(() {
+                      _loadRecentCuelgues();
                       _selectedHandIndex = 2;
                     });
                   },
@@ -118,6 +121,9 @@ class _GuardarCuelguePageState extends State<GuardarCuelguePage> {
                     decoration: InputDecoration(
                       labelText: 'Peso extra (kg)',
                     ),
+                    onChanged: (value) {
+                      _loadRecentCuelgues();
+                    },
                   ),
                 ),
               ],
@@ -137,6 +143,7 @@ class _GuardarCuelguePageState extends State<GuardarCuelguePage> {
                   onChanged: (String? newValue) {
                     setState(() {
                       _selectedGrip = newValue!;
+                      _loadRecentCuelgues();
                     });
                   },
                   items: <String>['Barra', '4Fx40', '4Fx25', 'romo 22º', 'romo 12º']
@@ -149,12 +156,26 @@ class _GuardarCuelguePageState extends State<GuardarCuelguePage> {
                 ),
               ],
             ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                _guardarDatos();
-              },
-              child: Text('Guardar'),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      _guardarDatos();
+                    },
+                    child: Text('Guardar'),
+                  ),
+                ),
+                SizedBox(width: 10),
+                Text('🧮🐒',style: TextStyle(fontSize: 30),),
+                SizedBox(width: 10),
+                ElevatedButton(
+                  onPressed: () {
+                    // Aquí puedes añadir la lógica para ver el histórico
+                  },
+                  child: Text('Ver histórico'),
+                ),
+              ],
             ),
             SizedBox(height: 20),
             Text('Últimos cuelgues similares:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
