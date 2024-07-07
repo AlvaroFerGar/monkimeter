@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import "package:monkimeter/database_helper.dart";
+
 
 import 'globals.dart';
 import 'audio_service.dart';
@@ -76,8 +78,9 @@ class _AjustesPageState extends State<AjustesPage> {
     );
   }
 
-    void _deleteDB() {
-      print("Aquí se borrará la DB");
+    Future<void> _deleteDB() async {
+      await DatabaseHelper.instance.deleteDatabase();
+      print("Aquí se borra la DB");
   }
 
     Future<void> _addAgarre() async {

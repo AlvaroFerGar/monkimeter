@@ -60,4 +60,17 @@ import 'package:path/path.dart';
         limit: limit,
       );
     }
+
+     Future<void> deleteDatabase() async {
+      final dbPath = await getDatabasesPath();
+      final path = join(dbPath, 'cuelgues.db');
+
+      // Close the database before deleting it
+      if (_database != null) {
+        await _database!.close();
+        _database = null;
+      }
+
+      await databaseFactory.deleteDatabase(path);
+    }
    }
