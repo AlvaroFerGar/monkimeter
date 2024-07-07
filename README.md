@@ -1,6 +1,6 @@
 # 🐵 Monkimeter 🐵
 
-![Test](assets/icon/icon.png)
+![Test](images/icon.png)
 
 Monkimeter es una aplicación móvil desarrollada en Flutter que te permite registrar y controlar tus entrenamientos de escalada en hangboard.
 
@@ -47,6 +47,10 @@ flutter run
 - `lib/`: Contiene el código fuente de la aplicación
 - `assets/`: Incluye recursos como imágenes, fuentes, etc.
 - `pubspec.yaml`: Archivo de configuración de Flutter y dependencias
+
+## Capturas de pantalla
+
+![1](images/Screenshot_readme1.png) ![2](images/Screenshot_readme2.png) ![3](images/Screenshot_readme3.png)
 
 ## P.D:
 
