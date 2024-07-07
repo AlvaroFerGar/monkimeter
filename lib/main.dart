@@ -15,6 +15,7 @@ class MonkimeterApp extends StatelessWidget {
       title: 'Monkimeter',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: MainPage(),
       routes: {
@@ -30,44 +31,67 @@ class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Monkimeter'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-              ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/metromono');
-              },
-              child: Text(
-                'Metromono',
-                style: TextStyle(fontSize: 24), // Aumenta el tamaño del texto
+      backgroundColor: Colors.grey[100],
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              _buildLogo(),
+              SizedBox(height: 30),
+              Text(
+                '🍌Monkimeter🍌',
+                style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue[700],
+                ),
               ),
-            ),
-            SizedBox(height: 20), // Espacio entre botones
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/guardar_cuelgue');
-              },
-              child: Text(
-                'Guardar Cuelgue',
-                style: TextStyle(fontSize: 24), // Aumenta el tamaño del texto
-              ),
-            ),
-            SizedBox(height: 20), // Espacio entre botones
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/ajustes');
-              },
-              child: Text(
-                'Ajustes',
-                style: TextStyle(fontSize: 24), // Aumenta el tamaño del texto
-              ),
-            ),
-          ],
+              SizedBox(height: 50),
+              _buildButton(context, 'Metromono', '/metromono', Icons.timer),
+              SizedBox(height: 16),
+              _buildButton(context, 'Guardar Cuelgue', '/guardar_cuelgue', Icons.save),
+              SizedBox(height: 16),
+              _buildButton(context, 'Ajustes', '/ajustes', Icons.settings),
+            ],
+          ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildLogo() {
+    return Container(
+      width: 120,
+      height: 120,
+      child: Image(
+      image: AssetImage('assets/icon/icon.png'),
+      fit: BoxFit.contain,
+      errorBuilder: (context, error, stackTrace) {
+        print('Error loading image: $error');
+        return Text('Failed to load image');
+      },
+    ),
+    );
+  }
+
+  Widget _buildButton(BuildContext context, String text, String route, IconData icon) {
+    return Container(
+      width: 250,
+      child: ElevatedButton.icon(
+        icon: Icon(icon),
+        label: Text(
+          text,
+          style: TextStyle(fontSize: 18),
+        ),
+        style: ElevatedButton.styleFrom(
+          foregroundColor: Colors.white, backgroundColor: Colors.blue,
+          padding: EdgeInsets.symmetric(vertical: 12),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        onPressed: () => Navigator.pushNamed(context, route),
       ),
     );
   }
