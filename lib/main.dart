@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:monkimeter/globals.dart';
 
 import 'metromono_page.dart';
 import 'save_page.dart';
@@ -30,6 +31,10 @@ class MonkimeterApp extends StatelessWidget {
 class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    //Se cargan en primer lugar los settings
+    loadSettings();
+    loadGripTypes();
+
     return Scaffold(
       backgroundColor: Colors.grey[100],
       body: SafeArea(

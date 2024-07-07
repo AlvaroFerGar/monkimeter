@@ -18,18 +18,9 @@ class _AjustesPageState extends State<AjustesPage> {
   @override
   void initState() {
     super.initState();
-    _loadSettings();
-  }
-
-  void _loadSettings() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      countdownStartValue = prefs.getInt('countdownStartValue') ?? 5;
-      speakInterval = prefs.getInt('speakInterval') ?? 5;
-      soundEnabled = prefs.getBool('soundEnabled') ?? true;
-      _countdownController.text = countdownStartValue.toString();
-      _speakintervalController.text = speakInterval.toString();
-    });
+    loadSettings();
+    _countdownController.text = countdownStartValue.toString();
+    _speakintervalController.text = speakInterval.toString();
   }
 
   void _saveSettings() async {
@@ -90,12 +81,8 @@ class _AjustesPageState extends State<AjustesPage> {
   }
 
     Future<void> _addAgarre() async {
-       await Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ManageGripsPage()),
-                  );
-      print("Aquí se añade un agarre");
-  }
+       await Navigator.push(context, MaterialPageRoute(builder: (context) => ManageGripsPage()),);
+    }
 
   @override
   Widget build(BuildContext context) {
